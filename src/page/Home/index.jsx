@@ -24,7 +24,7 @@ export default function Home() {
         <Menu style={{ marginTop: '50px' }} theme="dark" defaultSelectedKeys={['1']} mode="inline" items={menuItem} />
       </Sider>
       <Layout className="site-layout">
-        <Content>{<Outlet />}</Content>
+        <Content style={{ margin: '20px' }}>{<Outlet />}</Content>
         <Footer style={{ textAlign: 'center' }}>Stark Gaming © 2022 Created by Yours Truly</Footer>
       </Layout>
     </Layout>
