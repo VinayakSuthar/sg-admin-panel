@@ -4,6 +4,8 @@ import { Button, Popover, Space, Table, Typography } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
 const { Title, Text } = Typography;
 
+import { formatDate } from '@/utils/date';
+
 const columns = [
   { title: 'Id', dataIndex: 'id', key: 'id' },
   {
@@ -70,7 +72,7 @@ export default function Games() {
       Name,
       Publisher,
       Developer,
-      Released,
+      Released: formatDate(Released),
       genres: genres?.data,
     };
   });
