@@ -1,10 +1,10 @@
 import { Route, Routes } from 'react-router';
+import 'antd/dist/reset.css';
 
 import Home from './page/Home';
 import Games from './components/Games/Index';
 import CreateGame from './components/CreateGame';
 
-import 'antd/dist/reset.css';
 import './App.css';
 
 function App() {

@@ -1,49 +1,11 @@
 import axios from 'axios';
-import { useQuery } from 'react-query';
-import { Button, Table, Typography, Row, Col, Tag } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { useMutation, useQuery } from 'react-query';
+import { Button, Table, Typography, Row, Col, Tag, Popconfirm } from 'antd';
+import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 const { Title, Text } = Typography;
 
 import { formatDate } from '@/utils/date';
 import { useNavigate } from 'react-router-dom';
-
-const columns = [
-  { title: 'Id', dataIndex: 'id', key: 'id' },
-  {
-    title: 'Name',
-    dataIndex: 'Name',
-    key: 'name',
-  },
-  {
-    title: 'Genres',
-    dataIndex: 'Genres',
-    key: 'genres',
-    render: (_, { genres }) => {
-      return genres.map(({ id, attributes }) => {
-        return (
-          <Tag color="blue" key={id}>
-            {attributes.name}
-          </Tag>
-        );
-      });
-    },
-  },
-  {
-    title: 'Publisher',
-    dataIndex: 'Publisher',
-    key: 'publisher',
-  },
-  {
-    title: 'Developer',
-    dataIndex: 'Developer',
-    key: 'developer',
-  },
-  {
-    title: 'Released',
-    dataIndex: 'Released',
-    key: 'released',
-  },
-];
 
 const URL = import.meta.env.VITE_URL;
 function fetchGames() {
@@ -54,11 +16,84 @@ function fetchGames() {
   });
 }
 
+function deleteGame(id) {
+  return axios.delete(`${URL}/games/${id}`, {
+    headers: {
+      Authorization: `Bearer ${import.meta.env.VITE_TOKEN}`,
+    },
+  });
+}
+
 export default function Games() {
+  const { mutate } = useMutation(deleteGame, {
+    onSuccess: () => {
+      refetch();
+    },
+  });
   const navigate = useNavigate();
-  const { data, isLoading, isError } = useQuery('games', fetchGames, {
+  const { data, isLoading, isError, refetch } = useQuery('games', fetchGames, {
     select: (data) => data.data.data.map((game) => game),
   });
+  const columns = [
+    { title: 'Id', dataIndex: 'id', key: 'id' },
+    {
+      title: 'Name',
+      dataIndex: 'Name',
+      key: 'name',
+    },
+    {
+      title: 'Genres',
+      dataIndex: 'Genres',
+      key: 'genres',
+      render: (_, { genres }) => {
+        return genres.map(({ id, attributes }) => {
+          return (
+            <Tag color="blue" key={id}>
+              {attributes.name}
+            </Tag>
+          );
+        });
+      },
+    },
+    {
+      title: 'Publisher',
+      dataIndex: 'Publisher',
+      key: 'publisher',
+    },
+    {
+      title: 'Developer',
+      dataIndex: 'Developer',
+      key: 'developer',
+    },
+    {
+      title: 'Released',
+      dataIndex: 'Released',
+      key: 'released',
+    },
+    {
+      title: 'Action',
+      dataIndex: 'Action',
+      key: 'action',
+      render: (_, { id }) => {
+        return (
+          <Popconfirm
+            title="Delete the entry"
+            description="Are you sure to delete this entry?"
+            onConfirm={() => {
+              mutate(id);
+            }}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button danger>
+              <DeleteOutlined />
+            </Button>
+          </Popconfirm>
+        );
+      },
+    },
+  ];
+
   const tableData = data?.map(({ id, attributes }) => {
     const { Name, Publisher, Developer, Released, genres } = attributes;
     return {
