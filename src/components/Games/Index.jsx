@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
-import { Button, Popover, Space, Table, Typography } from 'antd';
-import { CaretDownOutlined } from '@ant-design/icons';
+import { Button, Table, Typography, Row, Col, Tag } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 const { Title, Text } = Typography;
 
 import { formatDate } from '@/utils/date';
+import { useNavigate } from 'react-router-dom';
 
 const columns = [
   { title: 'Id', dataIndex: 'id', key: 'id' },
@@ -18,20 +19,13 @@ const columns = [
     dataIndex: 'Genres',
     key: 'genres',
     render: (_, { genres }) => {
-      const content = (
-        <Space direction="vertical">
-          {genres.map(({ id, attributes }) => {
-            return <Text key={id}>{attributes.name}</Text>;
-          })}
-        </Space>
-      );
-      return (
-        <Popover content={content} placement="bottom" trigger="click">
-          <Button>
-            Items <CaretDownOutlined />
-          </Button>
-        </Popover>
-      );
+      return genres.map(({ id, attributes }) => {
+        return (
+          <Tag color="blue" key={id}>
+            {attributes.name}
+          </Tag>
+        );
+      });
     },
   },
   {
@@ -61,6 +55,7 @@ function fetchGames() {
 }
 
 export default function Games() {
+  const navigate = useNavigate();
   const { data, isLoading, isError } = useQuery('games', fetchGames, {
     select: (data) => data.data.data.map((game) => game),
   });
@@ -85,7 +80,14 @@ export default function Games() {
       <Title level={2} style={{ margin: 0 }}>
         Games
       </Title>
-      <Text type="secondary">{data?.length || 'No'} entries found</Text>
+      <Text type="secondary">{data?.length} entries found</Text>
+      <Row justify="end">
+        <Col>
+          <Button type="primary" icon={<PlusOutlined />} onClick={() => navigate('/game/create')}>
+            Create new entry
+          </Button>
+        </Col>
+      </Row>
       <Table columns={columns} dataSource={tableData} style={{ marginTop: '1em' }} loading={isLoading} />
     </>
   );

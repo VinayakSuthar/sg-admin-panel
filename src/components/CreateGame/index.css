@@ -1,0 +1,5 @@
+.game-form {
+  margin: 0 auto;
+  margin-top: 5em;
+  width: clamp(50%, 500px, 90%);
+}
