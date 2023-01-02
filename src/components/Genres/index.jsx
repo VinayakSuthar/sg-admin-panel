@@ -59,7 +59,7 @@ export default function Genres() {
                 <DeleteOutlined />
               </Button>
             </Popconfirm>
-            <Button type="text" size="small" onClick={() => navigate(`/game/${id}`)}>
+            <Button type="text" size="small" onClick={() => navigate(`/genre/${id}`)}>
               <EditOutlined />
             </Button>
           </Space>
