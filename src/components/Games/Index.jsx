@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useMutation, useQuery } from 'react-query';
-import { Button, Table, Typography, Row, Col, Tag, Popconfirm } from 'antd';
-import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Button, Table, Typography, Row, Col, Tag, Popconfirm, Space } from 'antd';
+import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 const { Title, Text } = Typography;
 
 import { formatDate } from '@/utils/date';
@@ -76,19 +76,25 @@ export default function Games() {
       key: 'action',
       render: (_, { id }) => {
         return (
-          <Popconfirm
-            title="Delete the entry"
-            description="Are you sure to delete this entry?"
-            onConfirm={() => {
-              mutate(id);
-            }}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button danger>
-              <DeleteOutlined />
+          <Space>
+            <Popconfirm
+              title="Delete the entry"
+              description="Are you sure to delete this entry?"
+              onConfirm={() => {
+                mutate(id);
+              }}
+              okText="Yes"
+              cancelText="No"
+              placement="left"
+            >
+              <Button type="text" danger size="small">
+                <DeleteOutlined />
+              </Button>
+            </Popconfirm>
+            <Button type="text" size="small" onClick={() => navigate(`/game/${id}`)}>
+              <EditOutlined />
             </Button>
-          </Popconfirm>
+          </Space>
         );
       },
     },

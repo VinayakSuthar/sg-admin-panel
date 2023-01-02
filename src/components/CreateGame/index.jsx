@@ -1,10 +1,9 @@
 import axios from 'axios';
-import { Button, message } from 'antd';
+import { message } from 'antd';
 import { useMutation } from 'react-query';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeftOutlined } from '@ant-design/icons';
 
 import GameForm from '../GameForm';
+import BackButton from '../BackButton';
 
 const URL = import.meta.env.VITE_URL;
 
@@ -17,7 +16,6 @@ function addGame(data) {
 }
 
 export default function CreateGame() {
-  const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
 
   const { mutate } = useMutation(addGame, {
@@ -46,9 +44,7 @@ export default function CreateGame() {
   return (
     <>
       {contextHolder}
-      <Button type="link" icon={<ArrowLeftOutlined />} onClick={() => navigate(-1)}>
-        Back
-      </Button>
+      <BackButton />
       <GameForm onFinish={handleFinish} f />
     </>
   );
