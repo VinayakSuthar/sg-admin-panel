@@ -4,7 +4,7 @@ import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 
-import EntryForm from '../EntryForm';
+import GameForm from '../GameForm';
 
 const URL = import.meta.env.VITE_URL;
 
@@ -49,7 +49,7 @@ export default function CreateGame() {
       <Button type="link" icon={<ArrowLeftOutlined />} onClick={() => navigate(-1)}>
         Back
       </Button>
-      <EntryForm onFinish={handleFinish} f />
+      <GameForm onFinish={handleFinish} f />
     </>
   );
 }

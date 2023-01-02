@@ -15,7 +15,7 @@ function fetchGenres() {
 }
 
 // eslint-disable-next-line react/prop-types
-export default function EntryForm({ onFinish, fields = [] }) {
+export default function GameForm({ onFinish, fields = [] }) {
   const [form] = Form.useForm();
   const { data, isError, isLoading } = useQuery('genres', fetchGenres, {
     select: (data) => data.data.data.map((game) => game),
