@@ -6,6 +6,7 @@ import Games from './components/Games/Index';
 import CreateGame from './components/CreateGame';
 import EditGame from './components/EditGame';
 import Genres from './components/Genres';
+import CreateGenre from './components/CreateGenre';
 
 import './App.css';
 
@@ -17,6 +18,7 @@ function App() {
         <Route path="/game/create" element={<CreateGame />} />
         <Route path="/game/:id" element={<EditGame />} />
         <Route path="/genres" element={<Genres />} />
+        <Route path="/genre/create" element={<CreateGenre />} />
       </Route>
     </Routes>
   );

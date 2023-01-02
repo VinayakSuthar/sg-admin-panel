@@ -49,7 +49,7 @@ export default function Genres() {
       <Text type="secondary">{data?.length} entries found</Text>
       <Row justify="end">
         <Col>
-          <Button type="primary" icon={<PlusOutlined />} onClick={() => navigate('/game/create')}>
+          <Button type="primary" icon={<PlusOutlined />} onClick={() => navigate('/genre/create')}>
             Create new entry
           </Button>
         </Col>
