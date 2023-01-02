@@ -15,7 +15,7 @@ function fetchGenres() {
 }
 
 // eslint-disable-next-line react/prop-types
-export default function GameForm({ onFinish, fields = [] }) {
+export default function GameForm({ onFinish, fields = [], loading = false, resetOnSubmit = true }) {
   const [form] = Form.useForm();
   const { data, isError, isLoading } = useQuery('genres', fetchGenres, {
     select: (data) => data.data.data.map((game) => game),
@@ -30,7 +30,7 @@ export default function GameForm({ onFinish, fields = [] }) {
 
   function handleFinish(value) {
     onFinish(value);
-    form.resetFields();
+    if (resetOnSubmit) form.resetFields();
   }
 
   if (isError) {
@@ -38,7 +38,7 @@ export default function GameForm({ onFinish, fields = [] }) {
   }
 
   return (
-    <Card className="game-form" type="inner">
+    <Card className="game-form" type="inner" loading={loading}>
       <Form layout="vertical" onFinish={handleFinish} form={form} fields={fields}>
         <Form.Item
           label="Name"
