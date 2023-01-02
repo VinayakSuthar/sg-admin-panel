@@ -5,6 +5,7 @@ import Home from './page/Home';
 import Games from './components/Games/Index';
 import CreateGame from './components/CreateGame';
 import EditGame from './components/EditGame';
+import Genres from './components/Genres';
 
 import './App.css';
 
@@ -15,6 +16,7 @@ function App() {
         <Route index element={<Games />} />
         <Route path="/game/create" element={<CreateGame />} />
         <Route path="/game/:id" element={<EditGame />} />
+        <Route path="/genres" element={<Genres />} />
       </Route>
     </Routes>
   );
