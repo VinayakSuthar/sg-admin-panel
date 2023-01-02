@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Layout, Menu } from 'antd';
-import { DesktopOutlined } from '@ant-design/icons';
+import { DesktopOutlined, AppstoreOutlined } from '@ant-design/icons';
 import { Outlet } from 'react-router';
 import { Link } from 'react-router-dom';
 
@@ -17,6 +17,9 @@ export default function Home() {
         <Menu style={{ marginTop: '50px' }} theme="dark" defaultSelectedKeys={['1']} mode="inline">
           <Menu.Item key={1} icon={<DesktopOutlined />}>
             <Link to="/">Games</Link>
+          </Menu.Item>
+          <Menu.Item key={2} icon={<AppstoreOutlined />}>
+            <Link to="/genres">Genres</Link>
           </Menu.Item>
         </Menu>
       </Sider>
