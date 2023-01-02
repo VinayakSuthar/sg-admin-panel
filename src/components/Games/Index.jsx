@@ -129,7 +129,13 @@ export default function Games() {
           </Button>
         </Col>
       </Row>
-      <Table columns={columns} dataSource={tableData} style={{ marginTop: '1em' }} loading={isLoading} />
+      <Table
+        columns={columns}
+        dataSource={tableData}
+        style={{ marginTop: '1em' }}
+        loading={isLoading}
+        scroll={{ x: 1200 }}
+      />
     </>
   );
 }
