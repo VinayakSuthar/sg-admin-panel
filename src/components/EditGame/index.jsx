@@ -11,6 +11,23 @@ import Title from 'antd/es/typography/Title';
 
 const URL = import.meta.env.VITE_URL;
 
+function fetchGame({ queryKey }) {
+  const id = queryKey[1];
+  return axios.get(`${URL}/games/${id}`, {
+    params: {
+      populate: '*',
+    },
+  });
+}
+
+function editGame({ id, body }) {
+  return axios.put(`${URL}/games/${id}`, body, {
+    headers: {
+      Authorization: `Bearer ${import.meta.env.VITE_TOKEN}`,
+    },
+  });
+}
+
 export default function EditGame() {
   const { id } = useParams();
   const [messageApi, contextHolder] = message.useMessage();
@@ -25,49 +42,27 @@ export default function EditGame() {
       { name: 'genres', value: genres.data.map((genre) => genre.id) },
     ]);
   }
-  const { isLoading, isError } = useQuery(
-    'game',
-    () => {
-      return axios.get(`${URL}/games/${id}`, {
-        params: {
-          populate: '*',
-        },
-      });
-    },
-    {
-      select: (data) => data.data.data,
-      cacheTime: 0,
-      onSuccess: updateGameData,
-    },
-  );
+  const { isLoading, isError } = useQuery(['game', id], fetchGame, {
+    select: (data) => data.data.data,
+    cacheTime: 0,
+    onSuccess: updateGameData,
+  });
 
-  const { mutate } = useMutation(
-    (data) => {
-      return axios.put(`${URL}/games/${id}`, data, {
-        headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_TOKEN}`,
-        },
-      });
+  const { mutate } = useMutation(editGame, {
+    onSuccess: () => {
+      messageApi.open({ type: 'success', content: 'Entry updated successfully' });
     },
-    {
-      onSuccess: () => {
-        messageApi.open({ type: 'success', content: 'Entry updated successfully' });
-      },
-      onError: (error) => {
-        messageApi.open({ type: 'error', content: `${error}` });
-      },
+    onError: (error) => {
+      messageApi.open({ type: 'error', content: `${error}` });
     },
-  );
+  });
 
   function handleFinish(value) {
     const { name, publisher, developer, released, genres } = value;
     mutate({
-      data: {
-        Name: name,
-        Publisher: publisher,
-        Developer: developer,
-        Released: released,
-        genres,
+      id,
+      body: {
+        data: { Name: name, Publisher: publisher, Developer: developer, Released: released, genres },
       },
     });
   }

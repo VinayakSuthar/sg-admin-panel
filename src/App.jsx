@@ -4,9 +4,9 @@ import 'antd/dist/reset.css';
 import Home from './page/Home';
 import Games from './components/Games/Index';
 import CreateGame from './components/CreateGame';
+import EditGame from './components/EditGame';
 
 import './App.css';
-import EditGame from './components/EditGame';
 
 function App() {
   return (
