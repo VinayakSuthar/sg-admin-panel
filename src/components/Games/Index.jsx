@@ -1,4 +1,4 @@
-import axios from 'axios';
+import client from '@/utils/client';
 import { useMutation, useQuery } from 'react-query';
 import { Button, Table, Typography, Row, Col, Tag, Popconfirm, Space } from 'antd';
 import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
@@ -7,9 +7,8 @@ const { Title, Text } = Typography;
 import { formatDate } from '@/utils/date';
 import { useNavigate } from 'react-router-dom';
 
-const URL = import.meta.env.VITE_URL;
 function fetchGames() {
-  return axios.get(`${URL}/games`, {
+  return client.get(`/games`, {
     params: {
       populate: '*',
     },
@@ -17,11 +16,7 @@ function fetchGames() {
 }
 
 function deleteGame(id) {
-  return axios.delete(`${URL}/games/${id}`, {
-    headers: {
-      Authorization: `Bearer ${import.meta.env.VITE_TOKEN}`,
-    },
-  });
+  return client.delete(`/games/${id}`);
 }
 
 export default function Games() {
