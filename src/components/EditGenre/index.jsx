@@ -1,18 +1,16 @@
 import { useParams } from 'react-router-dom';
 import { message, Typography } from 'antd';
-import axios from 'axios';
 import { useQuery, useMutation } from 'react-query';
 import { useState } from 'react';
 
 import BackButton from '../BackButton';
 import GenreForm from '../GenreForm';
+import client from '@/utils/client';
 const { Title } = Typography;
-
-const URL = import.meta.env.VITE_URL;
 
 function fetchGenre({ queryKey }) {
   const id = queryKey[1];
-  return axios.get(`${URL}/genres/${id}`, {
+  return client.get(`/genres/${id}`, {
     params: {
       populate: '*',
     },
@@ -20,11 +18,7 @@ function fetchGenre({ queryKey }) {
 }
 
 function editGenre({ id, body }) {
-  return axios.put(`${URL}/genres/${id}`, body, {
-    headers: {
-      Authorization: `Bearer ${import.meta.env.VITE_TOKEN}`,
-    },
-  });
+  return client.put(`/genres/${id}`, body);
 }
 
 export default function EditGenre() {
@@ -54,7 +48,6 @@ export default function EditGenre() {
   });
 
   function handleFinish(value) {
-    console.log('🚀 ~ file: index.jsx:57 ~ handleFinish ~ value', value);
     const { name, slug } = value;
     mutate({
       id,

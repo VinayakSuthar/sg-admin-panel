@@ -1,18 +1,12 @@
-import axios from 'axios';
 import { message } from 'antd';
 import { useMutation } from 'react-query';
 
 import GenreForm from '../GenreForm';
 import BackButton from '../BackButton';
-
-const URL = import.meta.env.VITE_URL;
+import client from '@/utils/client';
 
 function createGenre(data) {
-  return axios.post(`${URL}/genres`, data, {
-    headers: {
-      Authorization: `Bearer ${import.meta.env.VITE_TOKEN}`,
-    },
-  });
+  return client.post(`/genres`, data);
 }
 
 export default function CreateGenre() {

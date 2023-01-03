@@ -1,25 +1,19 @@
-import axios from 'axios';
 import { useQuery, useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { Button, Table, Typography, Row, Col, Space, Popconfirm } from 'antd';
 import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import client from '@/utils/client';
 const { Title, Text } = Typography;
 
-const URL = import.meta.env.VITE_URL;
-
 function fetchGenres() {
-  return axios.get(`${URL}/genres`, {
+  return client.get(`/genres`, {
     params: {
       populate: '*',
     },
   });
 }
 function deleteGenre(id) {
-  return axios.delete(`${URL}/genres/${id}`, {
-    headers: {
-      Authorization: `Bearer ${import.meta.env.VITE_TOKEN}`,
-    },
-  });
+  return client.delete(`/genres/${id}`);
 }
 
 export default function Genres() {
