@@ -30,16 +30,25 @@ export default function CreateGame() {
   });
 
   function handleFinish(value) {
-    const { name, publisher, developer, released, genres, image } = value;
+    const { name, publisher, developer, released, genres, description, image } = value;
     const data = {
       Name: name,
       Publisher: publisher,
       Developer: developer,
       Released: released,
       genres,
+      description,
     };
     const formData = new FormData();
-    formData.append('files.background_image', image.file, image.file.name);
+    if (image.length) {
+      if (image[0].originFileObj) {
+        formData.append('files.background_image', image[0].originFileObj, image[0].name);
+      } else {
+        formData.append('files.background_image', null);
+      }
+    } else {
+      data.background_image = null;
+    }
     formData.append('data', JSON.stringify(data));
     mutate(formData);
   }
@@ -48,7 +57,7 @@ export default function CreateGame() {
     <>
       {contextHolder}
       <BackButton />
-      <GameForm onFinish={handleFinish} f />
+      <GameForm onFinish={handleFinish} />
     </>
   );
 }
