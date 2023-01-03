@@ -11,6 +11,7 @@ function addGame(data) {
   return axios.post(`${URL}/games`, data, {
     headers: {
       Authorization: `Bearer ${import.meta.env.VITE_TOKEN}`,
+      'Content-Type': 'multipart/form-data',
     },
   });
 }
@@ -29,16 +30,18 @@ export default function CreateGame() {
   });
 
   function handleFinish(value) {
-    const { name, publisher, developer, released, genres } = value;
-    mutate({
-      data: {
-        Name: name,
-        Publisher: publisher,
-        Developer: developer,
-        Released: released,
-        genres,
-      },
-    });
+    const { name, publisher, developer, released, genres, image } = value;
+    const data = {
+      Name: name,
+      Publisher: publisher,
+      Developer: developer,
+      Released: released,
+      genres,
+    };
+    const formData = new FormData();
+    formData.append('files.background_image', image.file, image.file.name);
+    formData.append('data', JSON.stringify(data));
+    mutate(formData);
   }
 
   return (

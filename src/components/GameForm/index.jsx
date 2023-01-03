@@ -1,9 +1,17 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
-import { Button, Card, DatePicker, Form, Input, Row, Select } from 'antd';
-import Title from 'antd/es/typography/Title';
+import { Button, Card, DatePicker, Form, Input, Row, Select, Upload, Typography } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+const { Title } = Typography;
 
 import './index.css';
+
+// eslint-disable-next-line no-unused-vars
+const dummyRequest = ({ _, onSuccess }) => {
+  setTimeout(() => {
+    onSuccess('ok');
+  }, 0);
+};
 
 const URL = import.meta.env.VITE_URL;
 function fetchGenres() {
@@ -64,14 +72,21 @@ export default function GameForm({ onFinish, fields = [], loading = false, reset
         >
           <Input name="developer" />
         </Form.Item>
-        <Form.Item
-          label="Released"
-          name="released"
-          required
-          rules={[{ required: true, message: 'Please select released date', type: 'date' }]}
-        >
-          <DatePicker />
-        </Form.Item>
+        <Row justify="space-between">
+          <Form.Item
+            label="Released"
+            name="released"
+            required
+            rules={[{ required: true, message: 'Please select released date', type: 'date' }]}
+          >
+            <DatePicker />
+          </Form.Item>
+          <Form.Item label="Image" name="image" required>
+            <Upload customRequest={dummyRequest} beforeUpload={() => false}>
+              <Button icon={<UploadOutlined />}>Click To Upload</Button>
+            </Upload>
+          </Form.Item>
+        </Row>
         <Form.Item label="Genres" name="genres" required rules={[{ required: true, message: 'Please select genres' }]}>
           <Select
             options={genresData}

@@ -1,6 +1,6 @@
 .game-form {
   margin: 0 auto;
-  margin-top: 5em;
+  margin-top: 2em;
   width: clamp(50%, 500px, 90%);
   min-height: 500px;
 }
