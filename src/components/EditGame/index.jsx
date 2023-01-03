@@ -20,10 +20,11 @@ function fetchGame({ queryKey }) {
   });
 }
 
-function editGame({ id, body }) {
-  return axios.put(`${URL}/games/${id}`, body, {
+function editGame({ id, formData }) {
+  return axios.put(`${URL}/games/${id}`, formData, {
     headers: {
       Authorization: `Bearer ${import.meta.env.VITE_TOKEN}`,
+      'Content-Type': 'multipart/form-data',
     },
   });
 }
@@ -33,14 +34,27 @@ export default function EditGame() {
   const [messageApi, contextHolder] = message.useMessage();
   const [gameData, setGameData] = useState([]);
   function updateGameData(value) {
-    const { Name, Publisher, Developer, Released, genres } = value.attributes;
-    setGameData([
-      { name: 'name', value: Name },
-      { name: 'publisher', value: Publisher },
-      { name: 'developer', value: Developer },
-      { name: 'released', value: dayjs(Released) },
-      { name: 'genres', value: genres.data.map((genre) => genre.id) },
-    ]);
+    const { Name, Publisher, Developer, Released, genres, description, background_image } = value.attributes;
+
+    const imageValue = (function () {
+      if (background_image.data) {
+        const {
+          id,
+          attributes: { name, url },
+        } = background_image.data;
+        return [{ uid: id, name, url: `http://localhost:1337${url}` }];
+      }
+      return null;
+    })();
+    setGameData({
+      name: Name,
+      publisher: Publisher,
+      developer: Developer,
+      released: dayjs(Released),
+      genres: genres.data.map((genre) => genre.id),
+      description,
+      image: imageValue,
+    });
   }
   const { isLoading, isError } = useQuery(['game', id], fetchGame, {
     select: (data) => data.data.data,
@@ -58,13 +72,27 @@ export default function EditGame() {
   });
 
   function handleFinish(value) {
-    const { name, publisher, developer, released, genres } = value;
-    mutate({
-      id,
-      body: {
-        data: { Name: name, Publisher: publisher, Developer: developer, Released: released, genres },
-      },
-    });
+    const { name, publisher, developer, released, genres, description, image } = value;
+    const data = {
+      Name: name,
+      Publisher: publisher,
+      Developer: developer,
+      Released: released,
+      genres,
+      description,
+    };
+    const formData = new FormData();
+    if (image.length) {
+      if (image[0].originFileObj) {
+        formData.append('files.background_image', image[0].originFileObj, image[0].name);
+      } else {
+        formData.append('files.background_image', null);
+      }
+    } else {
+      data.background_image = null;
+    }
+    formData.append('data', JSON.stringify(data));
+    mutate({ id, formData });
   }
 
   return (
@@ -72,7 +100,7 @@ export default function EditGame() {
       {contextHolder}
       <BackButton />
       {isError ? (
-        <Title level={3}>An error occured. Please try again later</Title>
+        <Title level={3}>An error occurred. Please try again later</Title>
       ) : (
         <GameForm onFinish={handleFinish} fields={gameData} loading={isLoading} resetOnSubmit={false} />
       )}
