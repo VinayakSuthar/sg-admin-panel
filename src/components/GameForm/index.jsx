@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 import { Button, Card, DatePicker, Form, Input, Row, Select, Upload, Typography } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 const { Title } = Typography;
+const { TextArea } = Input;
 
 import './index.css';
 
@@ -21,6 +22,13 @@ function fetchGenres() {
     },
   });
 }
+
+const normFile = (e) => {
+  if (Array.isArray(e)) {
+    return e;
+  }
+  return e?.fileList;
+};
 
 // eslint-disable-next-line react/prop-types
 export default function GameForm({ onFinish, fields = [], loading = false, resetOnSubmit = true }) {
@@ -47,7 +55,7 @@ export default function GameForm({ onFinish, fields = [], loading = false, reset
 
   return (
     <Card className="game-form" type="inner" loading={loading}>
-      <Form layout="vertical" onFinish={handleFinish} form={form} fields={fields}>
+      <Form layout="vertical" onFinish={handleFinish} form={form} initialValues={fields}>
         <Form.Item
           label="Name"
           name="name"
@@ -81,8 +89,8 @@ export default function GameForm({ onFinish, fields = [], loading = false, reset
           >
             <DatePicker />
           </Form.Item>
-          <Form.Item label="Image" name="image" required>
-            <Upload customRequest={dummyRequest} beforeUpload={() => false}>
+          <Form.Item label="Image" name="image" valuePropName="fileList" getValueFromEvent={normFile}>
+            <Upload customRequest={dummyRequest} beforeUpload={() => false} listType="picture">
               <Button icon={<UploadOutlined />}>Click To Upload</Button>
             </Upload>
           </Form.Item>
@@ -95,6 +103,9 @@ export default function GameForm({ onFinish, fields = [], loading = false, reset
             loading={isLoading}
             dropdownStyle={{ backgroundColor: '#f5f5f5' }}
           />
+        </Form.Item>
+        <Form.Item label="Description" name="description">
+          <TextArea rows={4} />
         </Form.Item>
         <Row justify="end">
           <Form.Item>
