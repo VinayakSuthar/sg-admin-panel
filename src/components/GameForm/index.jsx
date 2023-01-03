@@ -1,7 +1,7 @@
-import axios from 'axios';
 import { useQuery } from 'react-query';
 import { Button, Card, DatePicker, Form, Input, Row, Select, Upload, Typography } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import client from '@/utils/client';
 const { Title } = Typography;
 const { TextArea } = Input;
 
@@ -14,9 +14,8 @@ const dummyRequest = ({ _, onSuccess }) => {
   }, 0);
 };
 
-const URL = import.meta.env.VITE_URL;
 function fetchGenres() {
-  return axios.get(`${URL}/genres`, {
+  return client.get(`/genres`, {
     params: {
       populate: '*',
     },

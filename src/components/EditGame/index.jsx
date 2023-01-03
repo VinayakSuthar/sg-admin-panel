@@ -1,19 +1,17 @@
 import { useParams } from 'react-router-dom';
 import { message } from 'antd';
-import axios from 'axios';
 import { useQuery, useMutation } from 'react-query';
 import dayjs from 'dayjs';
 import { useState } from 'react';
+import client from '@/utils/client';
 
 import BackButton from '../BackButton';
 import GameForm from '../GameForm';
 import Title from 'antd/es/typography/Title';
 
-const URL = import.meta.env.VITE_URL;
-
 function fetchGame({ queryKey }) {
   const id = queryKey[1];
-  return axios.get(`${URL}/games/${id}`, {
+  return client.get(`/games/${id}`, {
     params: {
       populate: '*',
     },
@@ -21,12 +19,7 @@ function fetchGame({ queryKey }) {
 }
 
 function editGame({ id, formData }) {
-  return axios.put(`${URL}/games/${id}`, formData, {
-    headers: {
-      Authorization: `Bearer ${import.meta.env.VITE_TOKEN}`,
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+  return client.put(`/games/${id}`, formData);
 }
 
 export default function EditGame() {

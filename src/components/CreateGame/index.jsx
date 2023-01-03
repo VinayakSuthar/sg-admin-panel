@@ -1,19 +1,12 @@
-import axios from 'axios';
 import { message } from 'antd';
 import { useMutation } from 'react-query';
 
 import GameForm from '../GameForm';
 import BackButton from '../BackButton';
-
-const URL = import.meta.env.VITE_URL;
+import client from '@/utils/client';
 
 function addGame(data) {
-  return axios.post(`${URL}/games`, data, {
-    headers: {
-      Authorization: `Bearer ${import.meta.env.VITE_TOKEN}`,
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+  return client.post(`/games`, data);
 }
 
 export default function CreateGame() {
@@ -40,7 +33,7 @@ export default function CreateGame() {
       description,
     };
     const formData = new FormData();
-    if (image.length) {
+    if (image?.length) {
       if (image[0].originFileObj) {
         formData.append('files.background_image', image[0].originFileObj, image[0].name);
       } else {
